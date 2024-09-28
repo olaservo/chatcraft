@@ -1,29 +1,30 @@
-import { ChatCraftProvider, SerializedChatCraftProvider } from "../ChatCraftProvider";
+import { ChatCraftProvider } from "../ChatCraftProvider";
 import { BedrockClient, ListFoundationModelsCommand } from "@aws-sdk/client-bedrock";
+import { fromIni } from "@aws-sdk/credential-provider-ini";
 
 export class BedrockProvider extends ChatCraftProvider {
-  constructor(name: string, url: string, defaultModel: string, key?: string) {
-    super(name, url, defaultModel, key);
+  constructor() {
+    super("Bedrock", "mock_url", "auto", "mock_key");
   }
 
   get logoUrl() {
     return "/openai-logo.png"; // TODO: This is a placeholder, the actual URL is not known
   }
 
-  // Parse from serialized JSON
-  static fromJSON({ name, defaultModel }: SerializedChatCraftProvider): BedrockProvider {
-    return new BedrockProvider(name, "", defaultModel, "");
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async validateApiKey(key: string) {
-    return true;
+    return true; // TODO: API key is not applicable here
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async queryModels(key: string) {
     // Create a Bedrock Runtime client in the AWS Region you want to use.
-    const client = new BedrockClient({ region: "us-west-2" });
+    const region = "us-west-2";
+    const profileName = "nordstrom-federated";
+    const client = new BedrockClient({
+      region: region,
+      credentials: fromIni({ profile: profileName }),
+    });
     const command = new ListFoundationModelsCommand({});
     const response = await client.send(command);
     try {

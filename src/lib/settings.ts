@@ -9,6 +9,7 @@ import { ChatCraftModel } from "../lib/ChatCraftModel";
 import { ChatCraftProvider, ProviderData } from "../lib/ChatCraftProvider";
 import { providerFromJSON, providerFromUrl } from "./providers";
 import { FreeModelProvider } from "./providers/DefaultProvider/FreeModelProvider";
+import { BedrockProvider } from "./providers/BedrockProvider";
 /**
  * We can use models from OpenAI or OpenRouter (https://openrouter.ai/docs).
  * If using the latter, we need to override the basePath to use the OpenRouter URL.
@@ -58,7 +59,7 @@ export const defaults: Settings = {
     voice: TextToSpeechVoices.ALLOY,
   },
   providers: {},
-  currentProvider: new FreeModelProvider(),
+  currentProvider: new BedrockProvider(),
   compressionFactor: 1,
   maxCompressedFileSizeMB: 20,
   maxImageDimension: 2048,

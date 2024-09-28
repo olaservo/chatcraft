@@ -55,7 +55,7 @@ export function providerFromJSON({
   }
 
   if (name === "Bedrock") {
-    return new BedrockProvider(name, "", defaultModel || "", "");
+    return new BedrockProvider();
   }
 
   return CustomProvider.fromJSON({ id, name, apiUrl, apiKey, defaultModel });
@@ -65,10 +65,12 @@ export const supportedProviders: ProviderData = (() => {
   const freeModel = new FreeModelProvider();
   const openRouter = new OpenRouterProvider();
   const openAi = new OpenAiProvider();
+  const bedrock = new BedrockProvider();
 
   return {
     [freeModel.name]: freeModel,
     [openRouter.name]: openRouter,
     [openAi.name]: openAi,
+    [bedrock.name]: bedrock,
   };
 })();

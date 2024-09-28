@@ -27,6 +27,7 @@ import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 import useAudioPlayer from "../../hooks/use-audio-player";
 import { usingOfficialOpenAI } from "../../lib/providers";
 import { useDebounce } from "react-use";
+import { BedrockProvider } from "../../lib/providers/BedrockProvider";
 
 type PromptSendButtonProps = {
   isLoading: boolean;
@@ -222,6 +223,7 @@ function DesktopPromptSendButton({ isLoading }: PromptSendButtonProps) {
   const providersList = {
     ...settings.providers,
     "Free AI Models": new FreeModelProvider(),
+    Bedrock: new BedrockProvider(),
   };
 
   return (
