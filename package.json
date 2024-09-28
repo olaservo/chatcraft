@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@antonz/runno": "^0.6.1",
+    "@aws-sdk/client-bedrock": "^3.658.1",
+    "@aws-sdk/client-bedrock-runtime": "^3.658.1",
     "@chakra-ui/react": "^2.8.2",
     "@codemirror/lang-javascript": "^6.2.2",
     "@codemirror/lang-yaml": "^6.1.1",

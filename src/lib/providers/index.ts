@@ -3,6 +3,7 @@ import { getSettings } from "../settings";
 import { OPENAI_API_URL, OpenAiProvider } from "./OpenAiProvider";
 import { OPENROUTER_API_URL, OpenRouterProvider } from "./OpenRouterProvider";
 import { FREEMODELPROVIDER_API_URL, FreeModelProvider } from "./DefaultProvider/FreeModelProvider";
+import { BedrockProvider } from "./BedrockProvider";
 import { CustomProvider } from "./CustomProvider";
 
 export const usingOfficialOpenAI = () => getSettings().currentProvider.apiUrl === OPENAI_API_URL;
@@ -51,6 +52,10 @@ export function providerFromJSON({
 
   if (apiUrl === FREEMODELPROVIDER_API_URL) {
     return new FreeModelProvider();
+  }
+
+  if (name === "Bedrock") {
+    return new BedrockProvider(name, "", defaultModel || "", "");
   }
 
   return CustomProvider.fromJSON({ id, name, apiUrl, apiKey, defaultModel });
