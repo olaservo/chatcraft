@@ -401,6 +401,8 @@ export const calculateTokenCost = (tokens: number, model: ChatCraftModel) => {
     return tokens * 0.002;
   }
 
+  // TODO: add pricing for other models from model details returned by API
+
   console.warn(`Unknown pricing for model ${model.toString()}`);
   return 0;
 };

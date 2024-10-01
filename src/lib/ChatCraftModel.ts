@@ -1,17 +1,21 @@
 export class ChatCraftModel {
   id: string;
   vendor: string;
+  inputCostPerMillion: number;
+  outputCostPerMillion: number;
 
   /**
    * @param model The model's name. Different providers give this in different
    * formats. OpenAI uses `gpt-3.5-turbo` with no vendor info, while OpenRouter.ai
    * uses `openai/gpt-3.5-turbo` (i.e., with vendor/* prefix).
    */
-  constructor(model: string) {
+  constructor(model: string, inputCostPerMillion?: number, outputCostPerMillion?: number) {
     this.id = model;
     const parts = model.split("/");
     // Default to "openai" if we don't get a vendor name
     this.vendor = parts.at(-2) || "openai";
+    this.inputCostPerMillion = inputCostPerMillion || 0.0;
+    this.outputCostPerMillion = outputCostPerMillion || 0.0;
   }
 
   get name() {
