@@ -9,9 +9,8 @@ export class ChatCraftModel {
    */
   constructor(model: string) {
     this.id = model;
-    const parts = model.split("/");
-    // Default to "openai" if we don't get a vendor name
-    this.vendor = parts.at(-2) || "openai";
+    const parts = model.includes("/") ? model.split("/") : model.split(".");
+    this.vendor = parts.length > 1 ? parts[0] : "openai";
   }
 
   get name() {
@@ -21,7 +20,9 @@ export class ChatCraftModel {
 
   get prettyModel(): string {
     // If we have vendor info in the name, drop it from the "pretty" name to fit better in small UI
-    return this.name.replace(`${this.vendor}/`, "");
+    return this.name.includes("/")
+      ? this.name.replace(`${this.vendor}/`, "")
+      : this.name.replace(`${this.vendor}.`, "");
   }
 
   get logoUrl() {

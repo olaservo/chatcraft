@@ -388,15 +388,15 @@ export const countTokens = async (text: string) => {
   return encoding.encode(text).length;
 };
 
+// TODO: differentiate between input and output token counts
 export const countTokensInMessages = async (messages: ChatCraftMessage[]) => {
   const counts = await Promise.all<number>(messages.map((message) => message.tokens()));
   return counts.reduce((total, current) => total + current, 0);
 };
 
-// See https://openai.com/pricing
 // TODO: This is a rough placeholder for getting more accurate pricing based on things like:
-// Input vs output tokens
-// On-Demand vs Provisioned and other individual provider pricing
+// - Input vs output tokens
+// - On-Demand vs Provisioned and other individual provider pricing
 export const calculateTokenCost = (tokens: number, model: ChatCraftModel) => {
   // First, try to get the pricing from the model details using the function getProviderModelDetails:
   const modelDetails = getProviderModelDetails(model.id);
