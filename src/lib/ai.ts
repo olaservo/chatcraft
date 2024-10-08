@@ -10,6 +10,11 @@ import {
 } from "./ChatCraftMessage";
 import { ChatCraftModel } from "./ChatCraftModel";
 import { TextToSpeechVoices, getSettings } from "./settings";
+import providerModelDetails from "../config/provider_model_details.json";
+
+export const getProviderModelDetails = (modelId: string) => {
+  return providerModelDetails.data.find((model) => model.id === modelId);
+};
 
 export type ChatOptions = {
   model?: ChatCraftModel;
@@ -390,6 +395,12 @@ export const countTokensInMessages = async (messages: ChatCraftMessage[]) => {
 
 // See https://openai.com/pricing
 export const calculateTokenCost = (tokens: number, model: ChatCraftModel) => {
+  // First, try to get the pricing from the model details using the function getProviderModelDetails:
+  const modelDetails = getProviderModelDetails(model.id);
+  if (modelDetails) {
+    // Pricing in the json is per 1,000,000 tokens
+    return (tokens * modelDetails.pricing.completion) / 1000000;
+  }
   // Pricing is per 1,000 tokens
   tokens = tokens / 1000;
 
