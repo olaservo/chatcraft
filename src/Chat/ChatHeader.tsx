@@ -26,6 +26,7 @@ import { useSettings } from "../hooks/use-settings";
 import useTitle from "../hooks/use-title";
 import { useCost } from "../hooks/use-cost";
 import { useAlert } from "../hooks/use-alert";
+import { calculateTokenCost } from "../lib/ai"; // Import the calculateTokenCost function
 
 type ChatHeaderProps = {
   chat: ChatCraftChat;
@@ -34,7 +35,7 @@ type ChatHeaderProps = {
 function ChatHeader({ chat }: ChatHeaderProps) {
   const { isOpen, onClose } = useDisclosure();
   const [tokens, setTokens] = useState<number | null>(null);
-  const { cost } = useCost();
+  const [cost, setCost] = useState<number | null>(null); // Add state for cost
   const [isEditing, setIsEditing] = useState(false);
   const { settings } = useSettings();
   const title = useTitle(chat);
@@ -48,9 +49,16 @@ function ChatHeader({ chat }: ChatHeaderProps) {
 
   useEffect(() => {
     if (settings.countTokens) {
-      chat.tokens().then(setTokens).catch(console.warn);
+      chat
+        .tokens()
+        .then((tokenCount) => {
+          setTokens(tokenCount);
+          const calculatedCost = calculateTokenCost(tokenCount, settings.model); // Calculate the cost
+          setCost(calculatedCost); // Set the cost
+        })
+        .catch(console.warn);
     }
-  }, [settings.countTokens, chat]);
+  }, [settings.countTokens, chat, settings.model]); // Add settings.model to the dependency array
 
   const handleSaveSummary = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -154,7 +162,7 @@ function ChatHeader({ chat }: ChatHeaderProps) {
                   {formatNumber(tokens)} Tokens
                 </Tag>
                 <Tag key="token-cost" size="sm" variant="outline" colorScheme="gray">
-                  {formatCurrency(cost)}
+                  {formatCurrency(cost ?? 0)}
                 </Tag>
               </Flex>
             )}
