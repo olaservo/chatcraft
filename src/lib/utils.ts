@@ -4,7 +4,12 @@ export const isWindows = () => !isMac();
 export const formatNumber = (n: number) => (n ? n.toLocaleString() : "0");
 
 export const formatCurrency = (n: number) =>
-  Intl.NumberFormat(undefined, { style: "currency", currency: "USD" }).format(n);
+  Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 8,
+  }).format(n);
 
 export const formatSeconds = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
